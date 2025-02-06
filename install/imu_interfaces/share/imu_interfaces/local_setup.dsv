@@ -1,0 +1,4 @@
+source;share/imu_interfaces/environment/ament_prefix_path.sh
+source;share/imu_interfaces/environment/library_path.sh
+source;share/imu_interfaces/environment/path.sh
+source;share/imu_interfaces/environment/pythonpath.sh

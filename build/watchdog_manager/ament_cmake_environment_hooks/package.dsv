@@ -1,0 +1,4 @@
+source;share/watchdog_manager/local_setup.bash
+source;share/watchdog_manager/local_setup.dsv
+source;share/watchdog_manager/local_setup.sh
+source;share/watchdog_manager/local_setup.zsh

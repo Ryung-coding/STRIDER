@@ -1,0 +1,7 @@
+{
+  "package_name": "controller_interfaces",
+  "non_idl_tuples": [
+    "/home/ryung/Desktop/strider_ws/src/Controller/controller_interfaces:msg/ControllerOutput.msg",
+    "/home/ryung/Desktop/strider_ws/src/Controller/controller_interfaces:msg/ControllerDebugVal.msg"
+  ]
+}

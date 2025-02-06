@@ -1,0 +1,233 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-a169f75575333e5d47a1.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17
+					]
+				},
+				{
+					"build" : "sbus_interfaces__py",
+					"jsonFile" : "directory-sbus_interfaces__py-372547b6ad6f8ae028ba.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "/home/ryung/Desktop/strider_ws/build/sbus_interfaces/sbus_interfaces__py",
+					"targetIndexes" : 
+					[
+						4
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "sbus_interfaces",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_build_sbus_interfaces_egg::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_build_sbus_interfaces_egg-e56b52815809a0b765e7.json",
+					"name" : "ament_cmake_python_build_sbus_interfaces_egg",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_copy_sbus_interfaces::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_copy_sbus_interfaces-0b1298a90c237394a4a6.json",
+					"name" : "ament_cmake_python_copy_sbus_interfaces",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sbus_interfaces::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sbus_interfaces-8fe012f5c5179974609f.json",
+					"name" : "sbus_interfaces",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sbus_interfaces__cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sbus_interfaces__cpp-4969712122d6e9c42952.json",
+					"name" : "sbus_interfaces__cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "sbus_interfaces__py::@7da0cdd50fdfc1fb1f5f",
+					"jsonFile" : "target-sbus_interfaces__py-3000131278081259ef20.json",
+					"name" : "sbus_interfaces__py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sbus_interfaces__rosidl_generator_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sbus_interfaces__rosidl_generator_c-a224ddb70ffc4cffd672.json",
+					"name" : "sbus_interfaces__rosidl_generator_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sbus_interfaces__rosidl_generator_py::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sbus_interfaces__rosidl_generator_py-0e1013aea7e184ebafc5.json",
+					"name" : "sbus_interfaces__rosidl_generator_py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sbus_interfaces__rosidl_typesupport_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sbus_interfaces__rosidl_typesupport_c-83aeeaf75cc7db7f9d3f.json",
+					"name" : "sbus_interfaces__rosidl_typesupport_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sbus_interfaces__rosidl_typesupport_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sbus_interfaces__rosidl_typesupport_c__pyext-71c181ccc11f47aa40f2.json",
+					"name" : "sbus_interfaces__rosidl_typesupport_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sbus_interfaces__rosidl_typesupport_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sbus_interfaces__rosidl_typesupport_cpp-89c769c9b2dc0efee5d2.json",
+					"name" : "sbus_interfaces__rosidl_typesupport_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sbus_interfaces__rosidl_typesupport_fastrtps_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sbus_interfaces__rosidl_typesupport_fastrtps_c-32df8b69a0ae9e8a7678.json",
+					"name" : "sbus_interfaces__rosidl_typesupport_fastrtps_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sbus_interfaces__rosidl_typesupport_fastrtps_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sbus_interfaces__rosidl_typesupport_fastrtps_c__pyext-99740acd25b120453295.json",
+					"name" : "sbus_interfaces__rosidl_typesupport_fastrtps_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sbus_interfaces__rosidl_typesupport_fastrtps_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sbus_interfaces__rosidl_typesupport_fastrtps_cpp-6e6be537d5120d04cbe9.json",
+					"name" : "sbus_interfaces__rosidl_typesupport_fastrtps_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sbus_interfaces__rosidl_typesupport_introspection_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sbus_interfaces__rosidl_typesupport_introspection_c-1fa9029d8a78a3f42672.json",
+					"name" : "sbus_interfaces__rosidl_typesupport_introspection_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sbus_interfaces__rosidl_typesupport_introspection_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sbus_interfaces__rosidl_typesupport_introspection_c__pyext-d9f6d7412fc2ff7cda37.json",
+					"name" : "sbus_interfaces__rosidl_typesupport_introspection_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sbus_interfaces__rosidl_typesupport_introspection_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sbus_interfaces__rosidl_typesupport_introspection_cpp-c8574fe6b9a563f677f9.json",
+					"name" : "sbus_interfaces__rosidl_typesupport_introspection_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sbus_interfaces_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sbus_interfaces_uninstall-b4b27886c6c5a33250e6.json",
+					"name" : "sbus_interfaces_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-99beb355579a5aaeaf09.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/ryung/Desktop/strider_ws/build/sbus_interfaces",
+		"source" : "/home/ryung/Desktop/strider_ws/src/SBUS/sbus_interfaces"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

@@ -1,0 +1,77 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from controller_interfaces/msg/ControllerDebugVal.msg
+// generated code does not contain a copyright notice
+
+
+module controller_interfaces {
+  module msg {
+    typedef double double__4[4];
+    typedef double double__3[3];
+    typedef double double__5[5];
+    struct ControllerDebugVal {
+      @verbatim (language="comment", text=
+        "[roll, pitch, yaw, z] in [rad, rad, rad, m]")
+      double__4 des_pos;
+
+      @verbatim (language="comment", text=
+        "pid_roll")
+      double__3 pid_mx;
+
+      @verbatim (language="comment", text=
+        "pid_pitch")
+      double__3 pid_my;
+
+      @verbatim (language="comment", text=
+        "pid_yaw")
+      double__3 pid_mz;
+
+      @verbatim (language="comment", text=
+        "pid_z")
+      double__3 pid_f;
+
+      @verbatim (language="comment", text=
+        "[rad, rad/s, rad/s^2]")
+      double__3 imu_roll;
+
+      @verbatim (language="comment", text=
+        "[rad, rad/s, rad/s^2]")
+      double__3 imu_pitch;
+
+      @verbatim (language="comment", text=
+        "[rad, rad/s, rad/s^2]")
+      double__3 imu_yaw;
+
+      @verbatim (language="comment", text=
+        "[m, m/s, m/s^2]")
+      double__3 opti_x;
+
+      @verbatim (language="comment", text=
+        "[m, m/s, m/s^2]")
+      double__3 opti_y;
+
+      @verbatim (language="comment", text=
+        "[m, m/s, m/s^2]")
+      double__3 opti_z;
+
+      @verbatim (language="comment", text=
+        "arm_1 thetas")
+      @unit (value="rad")
+      double__5 a1_mea;
+
+      @verbatim (language="comment", text=
+        "arm_2 thetas")
+      @unit (value="rad")
+      double__5 a2_mea;
+
+      @verbatim (language="comment", text=
+        "arm_3 thetas")
+      @unit (value="rad")
+      double__5 a3_mea;
+
+      @verbatim (language="comment", text=
+        "arm_4 thetas")
+      @unit (value="rad")
+      double__5 a4_mea;
+    };
+  };
+};

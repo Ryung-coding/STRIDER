@@ -1,0 +1,30 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from allocator_interfaces/msg/PwmVal.msg
+// generated code does not contain a copyright notice
+
+
+module allocator_interfaces {
+  module msg {
+    struct PwmVal {
+      @verbatim (language="comment", text=
+        "pwm for arm_1")
+      @unit (value="0. < f1 < 1.")
+      double f1;
+
+      @verbatim (language="comment", text=
+        "pwm for arm_2")
+      @unit (value="0. < f2 < 1.")
+      double f2;
+
+      @verbatim (language="comment", text=
+        "pwm for arm_3")
+      @unit (value="0. < f3 < 1.")
+      double f3;
+
+      @verbatim (language="comment", text=
+        "pwm for arm_4")
+      @unit (value="0. < f4 < 1.")
+      double f4;
+    };
+  };
+};

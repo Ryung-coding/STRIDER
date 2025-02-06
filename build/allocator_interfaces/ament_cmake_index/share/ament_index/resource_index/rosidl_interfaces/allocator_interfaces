@@ -1,0 +1,6 @@
+msg/AllocatorDebugVal.idl
+msg/AllocatorDebugVal.msg
+msg/JointVal.idl
+msg/JointVal.msg
+msg/PwmVal.idl
+msg/PwmVal.msg

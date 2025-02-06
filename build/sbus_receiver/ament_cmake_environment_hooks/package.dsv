@@ -1,0 +1,4 @@
+source;share/sbus_receiver/local_setup.bash
+source;share/sbus_receiver/local_setup.dsv
+source;share/sbus_receiver/local_setup.sh
+source;share/sbus_receiver/local_setup.zsh

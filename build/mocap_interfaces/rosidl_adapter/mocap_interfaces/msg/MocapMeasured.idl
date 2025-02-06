@@ -1,0 +1,20 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from mocap_interfaces/msg/MocapMeasured.msg
+// generated code does not contain a copyright notice
+
+
+module mocap_interfaces {
+  module msg {
+    typedef double double__3[3];
+    struct MocapMeasured {
+      @unit (value="m")
+      double__3 pos;
+
+      @unit (value="m/s")
+      double__3 vel;
+
+      @unit (value="m/s^2")
+      double__3 acc;
+    };
+  };
+};
