@@ -1,4 +1,0 @@
-source;share/allocator/local_setup.bash
-source;share/allocator/local_setup.dsv
-source;share/allocator/local_setup.sh
-source;share/allocator/local_setup.zsh

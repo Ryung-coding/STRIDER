@@ -1,6 +1,0 @@
-{
-  "package_name": "imu_interfaces",
-  "non_idl_tuples": [
-    "/home/ryung/Desktop/strider_ws/src/IMU/imu_interfaces:msg/ImuMeasured.msg"
-  ]
-}

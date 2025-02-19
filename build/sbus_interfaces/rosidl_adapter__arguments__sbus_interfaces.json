@@ -1,7 +1,0 @@
-{
-  "package_name": "sbus_interfaces",
-  "non_idl_tuples": [
-    "/home/ryung/Desktop/strider_ws/src/SBUS/sbus_interfaces:msg/SbusSignal.msg",
-    "/home/ryung/Desktop/strider_ws/src/SBUS/sbus_interfaces:msg/KillCmd.msg"
-  ]
-}

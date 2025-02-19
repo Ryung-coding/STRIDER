@@ -1,6 +1,0 @@
-setup.py
-watchdog_interfaces/__init__.py
-watchdog_interfaces.egg-info/PKG-INFO
-watchdog_interfaces.egg-info/SOURCES.txt
-watchdog_interfaces.egg-info/dependency_links.txt
-watchdog_interfaces.egg-info/top_level.txt

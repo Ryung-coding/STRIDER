@@ -1,8 +1,0 @@
-source;share/mocap/hook/cmake_prefix_path.ps1
-source;share/mocap/hook/cmake_prefix_path.dsv
-source;share/mocap/hook/cmake_prefix_path.sh
-source;share/mocap/local_setup.bash
-source;share/mocap/local_setup.dsv
-source;share/mocap/local_setup.ps1
-source;share/mocap/local_setup.sh
-source;share/mocap/local_setup.zsh

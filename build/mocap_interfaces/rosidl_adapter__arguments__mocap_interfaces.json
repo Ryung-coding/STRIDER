@@ -1,6 +1,0 @@
-{
-  "package_name": "mocap_interfaces",
-  "non_idl_tuples": [
-    "/home/ryung/Desktop/strider_ws/src/MoCap/mocap_interfaces:msg/MocapMeasured.msg"
-  ]
-}

@@ -1,6 +1,0 @@
-{
-  "package_name": "watchdog_interfaces",
-  "non_idl_tuples": [
-    "/home/ryung/Desktop/strider_ws/src/Watchdog_manager/watchdog_interfaces:msg/NodeState.msg"
-  ]
-}

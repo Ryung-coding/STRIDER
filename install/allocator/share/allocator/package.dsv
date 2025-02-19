@@ -1,8 +1,0 @@
-source;share/allocator/hook/cmake_prefix_path.ps1
-source;share/allocator/hook/cmake_prefix_path.dsv
-source;share/allocator/hook/cmake_prefix_path.sh
-source;share/allocator/local_setup.bash
-source;share/allocator/local_setup.dsv
-source;share/allocator/local_setup.ps1
-source;share/allocator/local_setup.sh
-source;share/allocator/local_setup.zsh

@@ -1,6 +1,0 @@
-setup.py
-allocator_interfaces/__init__.py
-allocator_interfaces.egg-info/PKG-INFO
-allocator_interfaces.egg-info/SOURCES.txt
-allocator_interfaces.egg-info/dependency_links.txt
-allocator_interfaces.egg-info/top_level.txt

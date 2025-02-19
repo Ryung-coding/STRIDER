@@ -1,8 +1,0 @@
-{
-  "package_name": "allocator_interfaces",
-  "non_idl_tuples": [
-    "/home/ryung/Desktop/strider_ws/src/Allocator/allocator_interfaces:msg/JointVal.msg",
-    "/home/ryung/Desktop/strider_ws/src/Allocator/allocator_interfaces:msg/PwmVal.msg",
-    "/home/ryung/Desktop/strider_ws/src/Allocator/allocator_interfaces:msg/AllocatorDebugVal.msg"
-  ]
-}
