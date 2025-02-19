@@ -70,7 +70,6 @@ ControllerNode::ControllerNode() : Node("controller_node") {
 
   // Subscription
   sbus_subscription_ = this->create_subscription<sbus_interfaces::msg::SbusSignal>("sbus_signal", 1, std::bind(&ControllerNode::sbusCallback, this, std::placeholders::_1));
-  joint_val_subscription_ = this->create_subscription<allocator_interfaces::msg::JointVal>("joint_mea", 1, std::bind(&ControllerNode::jointValCallback, this, std::placeholders::_1));
   optitrack_mea_subscription_ = this->create_subscription<mocap_interfaces::msg::MocapMeasured>("optitrack_mea", 1, std::bind(&ControllerNode::optitrackCallback, this, std::placeholders::_1));
   imu_mea_subscription_ = this->create_subscription<imu_interfaces::msg::ImuMeasured>("imu_mea", 1, std::bind(&ControllerNode::imuCallback, this, std::placeholders::_1));
 
@@ -108,10 +107,6 @@ void ControllerNode::sbusCallback(const sbus_interfaces::msg::SbusSignal::Shared
   des_pos_[3] = std::max(0.0, static_cast<double>(msg->ch[3]-400) / 600.0);
 
   // RCLCPP_INFO(this->get_logger(), "des_r: %.3f, des_p: %.3f, des_y: %.3f, des_z: %.3f", des_r_, des_p_, des_y_, des_z_);
-}
-
-void ControllerNode::jointValCallback(const allocator_interfaces::msg::JointVal::SharedPtr msg) {
-  latest_joint_val_ = *msg;
 }
 
 void ControllerNode::optitrackCallback(const mocap_interfaces::msg::MocapMeasured::SharedPtr msg) {

@@ -67,4 +67,13 @@ def generate_launch_description():
             name='pid_debugger_node',
             output='screen'
         ),
+        
+        # MuJoCo Node
+        Node(
+            package='mujoco_sim',
+            executable='mujoco_node',
+            name='mujoco_node',
+            output = 'screen'
+        ),
+
     ])
