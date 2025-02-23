@@ -18,33 +18,33 @@ PID_3::PID_3(const double Kp[3], const double Ki[3], const double Kd[3], const d
   }
 }
 
-double PID_3::update(const double& ref, const double msr[3], double output[3]) {
+double PID_3::update(const double& ref, const double msr[3], double u_log[3]) {
   double error = ref - msr[0];
+
   for (int8_t i = 0; i < 3; i++) {
-    if (i > 0) { error = output[i-1] - msr[i]; }
+    if (i > 0) { error = u_log[i-1] - msr[i]; }
     integral[i] += error * dt;
     integral[i] = std::clamp(integral[i], -Sat_gain[i], Sat_gain[i]);
-    double derivative = (error - prev_err[i]) / dt;
+    double derivative = 0 - (error - prev_err[i]) / dt;
     derivative = lpfAlpha[i] * derivative + lpfBeta[i] * prev_derivative[i];
-    output[i] = Kp[i] * error + Ki[i] * integral[i] + Kd[i] * derivative;
+    u_log[i] = Kp[i] * error + Ki[i] * integral[i] + Kd[i] * derivative;
     prev_err[i] = error;
     prev_derivative[i] = derivative;
   }
-  return output[2];
+  return u_log[2]; //final control input
 }
 
-// ---------------------------------------------------------------------------------- //
 
 ControllerNode::ControllerNode() : Node("controller_node") {
 
-  // PID_RollPitch parameters
-  static const double Kp_rp[3] = {1.0, 1.0, 1.0};
+    // PID_RollPitch parameters
+  static const double Kp_rp[3] = {1.0, 1.0, 1.0}; //pos vel acc 
   static const double Ki_rp[3] = {0.0, 0.0, 0.0};
   static const double Kd_rp[3] = {0.0, 0.0, 0.0};
   static const double Sat_gain_rp[3] = {0.0, 0.0, 0.0};
   static const double lpf_gain_rp = 0.0;
 
-  // PID_Yaw parameters
+    // PID_Yaw parameters
   static const double Kp_yaw[3] = {1.0, 1.0, 1.0};
   static const double Ki_yaw[3] = {0.0, 0.0, 0.0};
   static const double Kd_yaw[3] = {0.0, 0.0, 0.0};
@@ -72,7 +72,7 @@ ControllerNode::ControllerNode() : Node("controller_node") {
   sbus_subscription_ = this->create_subscription<sbus_interfaces::msg::SbusSignal>("sbus_signal", 1, std::bind(&ControllerNode::sbusCallback, this, std::placeholders::_1));
   joint_val_subscription_ = this->create_subscription<allocator_interfaces::msg::JointVal>("joint_mea", 1, std::bind(&ControllerNode::jointValCallback, this, std::placeholders::_1));
   optitrack_mea_subscription_ = this->create_subscription<mocap_interfaces::msg::MocapMeasured>("optitrack_mea", 1, std::bind(&ControllerNode::optitrackCallback, this, std::placeholders::_1));
-  imu_mea_subscription_ = this->create_subscription<imu_interfaces::msg::ImuMeasured>("imu_mea", 1, std::bind(&ControllerNode::imuCallback, this, std::placeholders::_1));
+  imu_mea_subscription_ = this->create_subscription<imu_interfaces::msg::ImuMeasured>("imu_custom", 1, std::bind(&ControllerNode::imuCallback, this, std::placeholders::_1));
 
   // Publish
   controller_publisher_ = this->create_publisher<controller_interfaces::msg::ControllerOutput>("controller_output", 1);
@@ -120,11 +120,17 @@ void ControllerNode::optitrackCallback(const mocap_interfaces::msg::MocapMeasure
   state_z_[0] = msg->pos[2]; state_z_[1] = msg->vel[2]; state_z_[2] = msg->acc[2];
 }
 
+
+
+
+
 void ControllerNode::imuCallback(const imu_interfaces::msg::ImuMeasured::SharedPtr msg) {
-  state_roll_[0] = msg->q[0]; state_roll_[1] = msg->qdot[0]; state_roll_[2] = msg->qddot[0];
-  state_pitch_[0] = msg->q[1]; state_pitch_[1] = msg->qdot[1]; state_pitch_[2] = msg->qddot[1];
-  state_yaw_[0] = msg->q[2]; state_yaw_[1] = msg->qdot[2]; state_yaw_[2] = msg->qddot[2];
+  state_roll_[0] = msg->angle[0]; state_roll_[1] = msg->omega[0]; state_roll_[2] = msg->alpha[0];
+  state_pitch_[0] = msg->angle[1]; state_pitch_[1] = msg->omega[1]; state_pitch_[2] = msg->alpha[1];
+  state_yaw_[0] = msg->angle[2]; state_yaw_[1] = msg->omega[2]; state_yaw_[2] = msg->alpha[2];
 }
+
+
 
 void ControllerNode::heartbeat_timer_callback() {
   heartbeat_state_++;

@@ -11,6 +11,7 @@ find_package(rclcpp_components REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(imu_interfaces REQUIRED)
 find_package(watchdog_interfaces REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 # Include directories
 include_directories(include)
@@ -24,8 +25,8 @@ ament_target_dependencies(imu_worker
   rclcpp_components
   imu_interfaces
   watchdog_interfaces
+  sensor_msgs
 )
-
 install(TARGETS
   imu_worker
   DESTINATION lib/${PROJECT_NAME}

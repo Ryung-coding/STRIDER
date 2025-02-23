@@ -9,6 +9,8 @@ AllocatorWorker::AllocatorWorker() : Node("allocator_node") {
     // Publishers
   joint_publisher_ = this->create_publisher<allocator_interfaces::msg::JointVal>("joint_val", 1);
   pwm_publisher_ = this->create_publisher<allocator_interfaces::msg::PwmVal>("pwm_val", 1);
+
+    // Debugers
   heartbeat_publisher_ = this->create_publisher<watchdog_interfaces::msg::NodeState>("allocator_state", 1);
   debug_val_publisher_ = this->create_publisher<allocator_interfaces::msg::AllocatorDebugVal>("allocator_info", 1);
 
@@ -68,7 +70,7 @@ AllocatorWorker::AllocatorWorker() : Node("allocator_node") {
   Vector3d r3 = Transformation_a3.block<3,1>(0,3) - CoM;
   Vector3d r4 = Transformation_a4.block<3,1>(0,3) - CoM;
 
-
+ 
   Matrix3d skew1 = (Matrix3d() <<      0, -r1(2),  r1(1),               
                                    r1(2),      0, -r1(0),
                                   -r1(1),  r1(0),     0).finished();  
@@ -116,7 +118,7 @@ AllocatorWorker::AllocatorWorker() : Node("allocator_node") {
 }
 
 
-
+  //get Arm position(q)
 void AllocatorWorker::JointValCallback(const allocator_interfaces::msg::JointVal::SharedPtr msg) {
   for (int i = 0; i < 5; ++i) {
       a1_q(i) = msg->a1_q[i];
@@ -127,37 +129,41 @@ void AllocatorWorker::JointValCallback(const allocator_interfaces::msg::JointVal
 }
 
 
+  // get Wrench_1={o} frame [Tau_rall Tau_pitch Tau_yaw Fz]^T --> Under-actuated system Allocation part
 void AllocatorWorker::controllerCallback(const controller_interfaces::msg::ControllerOutput::SharedPtr msg) {
-  // get [F Mx My Mz]
+  
   W1 << msg->moment[0], msg->moment[1], msg->moment[2], msg->force;
 
   // compute f [f1 f2 f3 f4] in [N]
-  u = A_inv * W1;
+  f = A_inv * W1;
 
   // resolve f[N] to pwm[0.0~1.0] 1000 2000 0-100?
-  pwm = ((u.array() - pwm_beta_).array() / pwm_alpha_).cwiseSqrt().matrix();
+  pwm = ((f.array() - pwm_beta_).array() / pwm_alpha_).cwiseSqrt().matrix();
   pwm = pwm.cwiseMax(0.0).cwiseMin(1.0); // this clamps to [0, 1]
 
-  RCLCPP_INFO(this->get_logger(), "Clamped PWM: [f1: %.2f, f2: %.2f, f3: %.2f, f4: %.2f]", u[0], u[1], u[2], u[3]);
+  RCLCPP_INFO(this->get_logger(), "Clamped PWM: [f1: %.2f, f2: %.2f, f3: %.2f, f4: %.2f]", f[0], f[1], f[2], f[3]);
 }
+
 
 void AllocatorWorker::publishJointVal() {
   auto joint_msg = allocator_interfaces::msg::JointVal();
 
-  // this is dummy zero
+  // this is dummy zero---------------------------------------
   for (int i = 0; i < 5; ++i) {
     joint_msg.a1_q[i] = 0.0;
     joint_msg.a2_q[i] = 0.0;
     joint_msg.a3_q[i] = 0.0;
     joint_msg.a4_q[i] = 0.0;
   }
+  // this is dummy zero---------------------------------------
 
   joint_publisher_->publish(joint_msg);
 }
 
+
 void AllocatorWorker::publishPwmVal() {
-  auto pwm_msg = allocator_interfaces::msg::PwmVal();
-  // this range should be [0, 1]
+  auto pwm_msg = allocator_interfaces::msg::PwmVal(); // this range should be [0, 1]
+
   pwm_msg.f1 = pwm[0];
   pwm_msg.f2 = pwm[1];
   pwm_msg.f3 = pwm[2];
@@ -165,28 +171,28 @@ void AllocatorWorker::publishPwmVal() {
   pwm_publisher_->publish(pwm_msg);
 }
 
+
+  // Populate the NodeState message
 void AllocatorWorker::heartbeat_timer_callback() {
   heartbeat_state_++;
 
-  // Populate the NodeState message
   watchdog_interfaces::msg::NodeState state_msg;
   state_msg.state = heartbeat_state_;
-
-  // Publish the sbus_state message
   heartbeat_publisher_->publish(state_msg);
 }
 
-void AllocatorWorker::debugging_timer_callback() {
+
   // Populate the debugging message
+void AllocatorWorker::debugging_timer_callback() {
+  
   allocator_interfaces::msg::AllocatorDebugVal info_msg;
   info_msg.pwm[0] = pwm[0];
   info_msg.pwm[1] = pwm[1];
   info_msg.pwm[2] = pwm[2];
   info_msg.pwm[3] = pwm[3];
-
-  // Publish
   debug_val_publisher_->publish(info_msg);
 }
+
 
 int main(int argc, char **argv) {
   rclcpp::init(argc, argv);
