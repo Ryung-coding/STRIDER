@@ -18,7 +18,7 @@ using Eigen::Vector4d;
 using Eigen::VectorXd;
 using Eigen::MatrixXd;
 
-#define A1 0.13 // Arm length [m]
+#define A1 -0.13 // Arm length [m] -> negative
 #define A2 0.15 // Arm length [m]
 #define A3 0.18 // Arm length [m]
 #define A4 0.6625 // Arm length [m]
@@ -30,6 +30,10 @@ using Eigen::MatrixXd;
 #define xc 0.00 // Center of Mass position [m]
 #define yc 0.00 // Center of Mass position [m]
 #define zc 0.00 // Center of Mass position [m]
+
+#define pwm_alpha 1.00  // F = a * pwm^2 - b
+#define pwm_beta 0.00   // F = a * pwm^2 - b
+
 
 class AllocatorWorker : public rclcpp::Node {
 public:
@@ -69,12 +73,15 @@ private:
   Vector3d CoM = Vector3d::Zero();  // Center of Mass position [xc yc zc]
   VectorXd a1_q, a2_q, a3_q, a4_q;  // Link angle arm 1~4
   
+  Matrix4d Transformation_a1 = Matrix4d::Identity();
+  Matrix4d Transformation_a2 = Matrix4d::Identity();
+  Matrix4d Transformation_a3 = Matrix4d::Identity();
+  Matrix4d Transformation_a4 = Matrix4d::Identity();
+
   MatrixXd A_1 = MatrixXd::Zero(4, 12);
   MatrixXd A_2 = MatrixXd::Zero(12, 4);
   MatrixXd A = MatrixXd::Zero(4, 4);
   MatrixXd A_inv = MatrixXd::Zero(4,4);
-  double pwm_alpha_=0.0;
-  double pwm_beta_=0.0;
 
   uint8_t heartbeat_state_; // previous node state
 };
