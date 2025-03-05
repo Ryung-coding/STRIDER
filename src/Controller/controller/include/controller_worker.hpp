@@ -5,6 +5,7 @@
 #include "sbus_interfaces/msg/sbus_signal.hpp"
 #include "controller_interfaces/msg/controller_output.hpp"
 #include "controller_interfaces/msg/controller_debug_val.hpp"
+#include "allocator_interfaces/msg/joint_val.hpp"
 #include "mocap_interfaces/msg/mocap_measured.hpp"
 #include "imu_interfaces/msg/imu_measured.hpp"
 #include "watchdog_interfaces/msg/node_state.hpp"
@@ -29,27 +30,35 @@ public:
 
 private:
   void sbusCallback(const sbus_interfaces::msg::SbusSignal::SharedPtr msg);
+  void jointValCallback(const allocator_interfaces::msg::JointVal::SharedPtr msg);
   void optitrackCallback(const mocap_interfaces::msg::MocapMeasured::SharedPtr msg);
   void imuCallback(const imu_interfaces::msg::ImuMeasured::SharedPtr msg);
   void contorller_timer_callback();
   void heartbeat_timer_callback();
   void debugging_timer_callback();
 
-  // Four PID instances
+  //Four PID instances
   PID_3 pid_roll_, pid_pitch_, pid_yaw_, pid_z_;
 
+    //Subscribers
   rclcpp::Subscription<sbus_interfaces::msg::SbusSignal>::SharedPtr sbus_subscription_;
+  rclcpp::Subscription<allocator_interfaces::msg::JointVal>::SharedPtr joint_val_subscription_;
   rclcpp::Subscription<mocap_interfaces::msg::MocapMeasured>::SharedPtr optitrack_mea_subscription_;
   rclcpp::Subscription<imu_interfaces::msg::ImuMeasured>::SharedPtr imu_mea_subscription_;
 
+    //Publishers
   rclcpp::Publisher<controller_interfaces::msg::ControllerOutput>::SharedPtr controller_publisher_;
-  rclcpp::TimerBase::SharedPtr contorller_timer_;
-  
-  rclcpp::Publisher<watchdog_interfaces::msg::NodeState>::SharedPtr heartbeat_publisher_;
-  rclcpp::TimerBase::SharedPtr heartbeat_timer_;
 
+    //Debugers
+  rclcpp::Publisher<watchdog_interfaces::msg::NodeState>::SharedPtr heartbeat_publisher_;
   rclcpp::Publisher<controller_interfaces::msg::ControllerDebugVal>::SharedPtr debug_val_publisher_;
+
+    //Timers for publishing
+  rclcpp::TimerBase::SharedPtr contorller_timer_;
+  rclcpp::TimerBase::SharedPtr heartbeat_timer_;
   rclcpp::TimerBase::SharedPtr debugging_timer_;
+  
+  allocator_interfaces::msg::JointVal latest_joint_val_;
 
   double weight = 0;
 

@@ -13,6 +13,7 @@ find_package(controller_interfaces REQUIRED)
 find_package(sbus_interfaces REQUIRED)
 find_package(imu_interfaces REQUIRED)
 find_package(mocap_interfaces REQUIRED)
+find_package(allocator_interfaces REQUIRED)
 find_package(watchdog_interfaces REQUIRED)
 
 # Include directories
@@ -29,6 +30,7 @@ ament_target_dependencies(controller_worker
   sbus_interfaces
   imu_interfaces
   mocap_interfaces
+  allocator_interfaces
   watchdog_interfaces
 )
 
