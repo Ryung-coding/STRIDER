@@ -1,0 +1,12 @@
+/motion_capture_tracking:
+  ros__parameters:
+    type: "optitrack"
+    hostname: "130.149.82.37"
+
+    topics:
+      poses:
+        qos:
+          mode: "none"
+          deadline: 100.0
+
+    logfilepath: ''

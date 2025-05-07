@@ -55,8 +55,10 @@ private:
 
   // Latest Joint values
   double th1_ = 0.0;       // [rad]
-  double th2_ = 0.84522;    // [rad]
-  double th3_ = -1.50944;   // [rad]
+  //DH변경을 통하여 다음과 같이 수정됨 
+  double th2_ = -0.84522;    // [rad]
+  //DH변경을 통하여 다음과 같이 수정됨 
+  double th3_ = 1.50944;   // [rad]
   double th4_ = 0.90812; // [rad]
   double th5_ = 0.0;       // [rad]
 

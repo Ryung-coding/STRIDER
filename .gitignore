@@ -1,6 +1,13 @@
 build/
 install/
 log/
-MUJOCO_LOG.TXT/
+.colcon/
+
+**/CMakeLists.txt
+**/cmake-build-debug/
+**/compile_commands.json
 
 .vscode/
+.idea/
+*.swp
+*.swo

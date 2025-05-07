@@ -213,19 +213,11 @@ void DynamixelNode::change_velocity_gain(uint8_t dxl_id, uint16_t p_gain, uint16
 /* for Both */
 void DynamixelNode::armchanger_callback(const dynamixel_interfaces::msg::JointVal::SharedPtr msg) {
 
-  for (uint8_t i = 0; i < 5; ++i) {
-    if (i != 3){
-      arm_des_rad[0][i] = -msg->a1_des[i];  // Arm 1
-      arm_des_rad[1][i] = -msg->a2_des[i];  // Arm 2
-      arm_des_rad[2][i] = -msg->a3_des[i];  // Arm 3
-      arm_des_rad[3][i] = -msg->a4_des[i];  // Arm 4
-    }
-    else{
+  for (uint8_t i = 0; i < 5; ++i) { //DH변경을 통하여 다음과 같이 수정됨 
       arm_des_rad[0][i] = msg->a1_des[i];   // Arm 1
       arm_des_rad[1][i] = msg->a2_des[i];   // Arm 2
       arm_des_rad[2][i] = msg->a3_des[i];   // Arm 3
       arm_des_rad[3][i] = msg->a4_des[i];   // Arm 4
-    }
   }
 
   arm_des_ppr[0][0] = msg->a1_des[0] * rad2ppr_J1 + 2048.0;  // Arm 1

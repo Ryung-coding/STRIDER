@@ -17,7 +17,6 @@ OptiTrackNode::OptiTrackNode()
   // Create a timer to publish Node state messages at 10Hz
   heartbeat_timer_ = this->create_wall_timer(std::chrono::milliseconds(100), std::bind(&OptiTrackNode::heartbeat_timer_callback, this));
 
-
   // Mode = sim -> mujoco Sub
   // Mode = real -> Reading OptiTrack
   this->declare_parameter<std::string>("mode", "None");
@@ -25,7 +24,9 @@ OptiTrackNode::OptiTrackNode()
   this->get_parameter("mode", mode);
 
   if (mode == "real"){
-    RCLCPP_WARN(this->get_logger(), "Opti Node : I cannot do anything :(");
+    // Subscription True Measuring value from MuJoCo
+    optitrack_mea_subscription_ = this->create_subscription<mocap_interfaces::msg::NamedPoseArray>("poses", 1,std::bind(&OptiTrackNode::optitrack_callback, this, std::placeholders::_1));
+    publish_timer_ = this->create_wall_timer(std::chrono::milliseconds(1), std::bind(&OptiTrackNode::PublishOptiTrackMeasurement, this));
   }
   else if (mode == "sim"){
     // Subscription True Measuring value from MuJoCo
@@ -38,6 +39,57 @@ OptiTrackNode::OptiTrackNode()
 }
 
 /* for real */
+
+void OptiTrackNode::optitrack_callback(const mocap_interfaces::msg::NamedPoseArray::SharedPtr msg) 
+{
+  rclcpp::Time now_time = this->now();
+
+  for (const auto& pose : msg->poses) 
+  {
+    if (pose.name == "strider") 
+    {
+      real_optitrack_data_past_ = real_optitrack_data_;
+
+      real_optitrack_data_.stamp = now_time;
+      real_optitrack_data_.pos[0] = pose.pose.position.x;
+      real_optitrack_data_.pos[1] = pose.pose.position.y;
+      real_optitrack_data_.pos[2] = pose.pose.position.z;
+
+      rclcpp::Duration dt = real_optitrack_data_.stamp - real_optitrack_data_past_.stamp;
+      if (dt.seconds() > 1e-6) 
+      {
+        for (size_t i = 0; i < 3; ++i) 
+          real_optitrack_data_.vel[i] = (real_optitrack_data_.pos[i] - real_optitrack_data_past_.pos[i]) / dt.seconds();
+      } 
+      else real_optitrack_data_.vel.fill(0.0);
+        
+      real_optitrack_data_.acc.fill(0.0);
+      break;
+
+    }
+  }
+}\
+
+
+void OptiTrackNode::PublishOptiTrackMeasurement() {
+  // Publish data from real_optitrack_data_
+  auto output_msg = mocap_interfaces::msg::MocapMeasured();
+
+  output_msg.pos = { real_optitrack_data_.pos[0],
+                     real_optitrack_data_.pos[1],
+                     real_optitrack_data_.pos[2] };
+
+  output_msg.vel = { real_optitrack_data_.vel[0],
+                     real_optitrack_data_.vel[1],
+                     real_optitrack_data_.vel[2] };
+
+  output_msg.acc = { real_optitrack_data_.acc[0],
+                     real_optitrack_data_.acc[1],
+                     real_optitrack_data_.acc[2] };
+
+  mocap_publisher_->publish(output_msg);
+}
+
 
 /* for sim */
 void OptiTrackNode::mujoco_callback(const mujoco_interfaces::msg::MuJoCoMeas::SharedPtr msg) {
@@ -63,6 +115,7 @@ void OptiTrackNode::mujoco_callback(const mujoco_interfaces::msg::MuJoCoMeas::Sh
     else { break; }
   }
 }
+
 
 void OptiTrackNode::PublishMuJoCoMeasurement() {
   if (data_buffer_.empty()) { return; }
