@@ -55,14 +55,7 @@ void OptiTrackNode::optitrack_callback(const mocap_interfaces::msg::NamedPoseArr
       real_optitrack_data_.pos[1] = pose.pose.position.y;
       real_optitrack_data_.pos[2] = pose.pose.position.z;
 
-      rclcpp::Duration dt = real_optitrack_data_.stamp - real_optitrack_data_past_.stamp;
-      if (dt.seconds() > 1e-6) 
-      {
-        for (size_t i = 0; i < 3; ++i) 
-          real_optitrack_data_.vel[i] = (real_optitrack_data_.pos[i] - real_optitrack_data_past_.pos[i]) / dt.seconds();
-      } 
-      else real_optitrack_data_.vel.fill(0.0);
-        
+      real_optitrack_data_.vel.fill(0.0);
       real_optitrack_data_.acc.fill(0.0);
       break;
 

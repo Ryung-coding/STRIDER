@@ -67,7 +67,6 @@ private:
   
   // No Delayed data
   DelayedData real_optitrack_data_;
-  DelayedData real_optitrack_data_past_;
 };
 
 #endif // MOCAP_WORKER_HPP
