@@ -48,8 +48,6 @@ void OptiTrackNode::optitrack_callback(const mocap_interfaces::msg::NamedPoseArr
   {
     if (pose.name == "strider") 
     {
-      real_optitrack_data_past_ = real_optitrack_data_;
-
       real_optitrack_data_.stamp = now_time;
       real_optitrack_data_.pos[0] = pose.pose.position.x;
       real_optitrack_data_.pos[1] = pose.pose.position.y;

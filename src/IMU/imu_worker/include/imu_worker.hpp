@@ -5,6 +5,7 @@
 #include "imu_interfaces/msg/imu_measured.hpp"
 #include "mujoco_interfaces/msg/mu_jo_co_meas.hpp"
 #include "watchdog_interfaces/msg/node_state.hpp"
+#include "sensor_msgs/msg/imu.hpp"
 #include <chrono>
 #include <deque>
 #include <functional>
@@ -28,8 +29,10 @@ public:
 
 private:
   void PublishMuJoCoMeasurement();
+  void PublishMicroStrainMeasurement();
   void heartbeat_timer_callback();
   void mujoco_callback(const mujoco_interfaces::msg::MuJoCoMeas::SharedPtr msg);
+  void microstrain_callback(const sensor_msgs::msg::Imu::SharedPtr msg);
 
   // Publisher
   rclcpp::Publisher<imu_interfaces::msg::ImuMeasured>::SharedPtr imu_publisher_;
@@ -41,6 +44,7 @@ private:
 
   // Subscriber
   rclcpp::Subscription<mujoco_interfaces::msg::MuJoCoMeas>::SharedPtr mujoco_subscription_;
+  rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr microstrain_subscription_;
 
   // Buffer (FIFO) to store data for delayed output
   std::deque<DelayedData> data_buffer_;
@@ -56,6 +60,9 @@ private:
   std::normal_distribution<double> angle_dist_;
   std::normal_distribution<double> axis_dist_;
   std::normal_distribution<double> noise_dist_;
+
+  // Real IMU latest data
+  DelayedData real_imu_data;
 };
 
 #endif // IMU_WORKER_HPP

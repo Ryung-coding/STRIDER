@@ -5,6 +5,8 @@ from launch_ros.actions import Node
 from launch.conditions import IfCondition
 import os
 from ament_index_python.packages import get_package_share_directory
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 mocap_share_dir = get_package_share_directory('mocap')
 node_config = os.path.join(mocap_share_dir, 'config', 'cfg.yaml')
@@ -72,6 +74,19 @@ def generate_launch_description():
             executable='imu_worker',
             name='imu_node',
             parameters=[{'mode': mode}],
+            condition=IfCondition(PythonExpression(["'", mode, "' == 'real'"]))
+        ),
+
+        # Microstrain Node (launch 포함)
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                os.path.join(
+                    get_package_share_directory('microstrain_inertial_driver'),
+                    'launch',
+                    'microstrain_launch.py'
+                )
+            ),
+            condition=IfCondition(PythonExpression(["'", mode, "' == 'real'"])),
         ),
 
         # SBUS Worker Node

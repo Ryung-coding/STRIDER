@@ -35,7 +35,9 @@ IMUnode::IMUnode()
   this->get_parameter("mode", mode);
 
   if (mode == "real"){
-    RCLCPP_WARN(this->get_logger(), "IMU Node : I cannot do anything :(");
+        // Subscription True Measuring value from microstrain IMU
+    microstrain_subscription_ = this->create_subscription<sensor_msgs::msg::Imu>("imu/data", 1, std::bind(&IMUnode::microstrain_callback, this, std::placeholders::_1));
+    publish_timer_ = this->create_wall_timer(std::chrono::milliseconds(1), std::bind(&IMUnode::PublishMicroStrainMeasurement, this));
   }
   else if (mode == "sim"){
     // Subscription True Measuring value from MuJoCo
@@ -47,6 +49,34 @@ IMUnode::IMUnode()
   }
 }
 /* for real */
+void IMUnode::microstrain_callback(const sensor_msgs::msg::Imu::SharedPtr msg) 
+{
+  real_imu_data.stamp = this->now();
+
+  // Orientation quaternion: [w, x, y, z]
+  real_imu_data.q[0] = msg->orientation.w;
+  real_imu_data.q[1] = msg->orientation.x;
+  real_imu_data.q[2] = msg->orientation.y;
+  real_imu_data.q[3] = msg->orientation.z;
+
+  // Angular velocity: [x, y, z]
+  real_imu_data.w[0] = msg->angular_velocity.x;
+  real_imu_data.w[1] = msg->angular_velocity.y;
+  real_imu_data.w[2] = msg->angular_velocity.z;
+}
+
+void IMUnode::PublishMicroStrainMeasurement() 
+{
+  auto output_msg = imu_interfaces::msg::ImuMeasured();
+
+  // orientation
+  output_msg.q = { real_imu_data.q[0], real_imu_data.q[1], real_imu_data.q[2], real_imu_data.q[3] };
+
+  // angular velocity
+  output_msg.w = { real_imu_data.w[0], real_imu_data.w[1], real_imu_data.w[2] };
+
+  imu_publisher_->publish(output_msg);
+}
 
 /* for sim */
 void IMUnode::mujoco_callback(const mujoco_interfaces::msg::MuJoCoMeas::SharedPtr msg) {
