@@ -48,7 +48,7 @@ void AllocatorWorker::controllerCallback(const controller_interfaces::msg::Contr
   filtered_frequency_ = 1.0 / avg_dt;
 
   // get [Mx My Mz F]
-  W1 << msg->moment[0], msg->moment[1], msg->moment[2], msg->force*-1; 
+  W1 << msg->moment[0], msg->moment[1], msg->moment[2], msg->force; 
   // get Wrench_1={B} frame [Tau_rall Tau_pitch Tau_yaw Fz]^T --> Under-actuated system Allocation part
   
   for (int arm_number = 1; arm_number <= 4; arm_number++) 
