@@ -43,7 +43,7 @@ inline ControlParameters getControlParameters() {
 
 inline IntegralParameters getIntegralParameters() {
   IntegralParameters param;
-  param.kIX = 1.0;
+  param.kIX = 0.1;
   param.ki = 0.01;
   param.kIR = 0.15;
   param.kI = 0.01;

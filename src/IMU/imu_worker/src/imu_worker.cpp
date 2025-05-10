@@ -149,9 +149,9 @@ void IMUnode::PublishMuJoCoMeasurement() {
 
   // Add white noise to angular velocity measurements using pre-initialized distribution
   double noisy_w[3] = {
-    delayed_data.w[0] + noise_dist_(gen_),
-    delayed_data.w[1] + noise_dist_(gen_),
-    delayed_data.w[2] + noise_dist_(gen_)
+    delayed_data.w[0] + noise_dist_(gen_)*0,
+    delayed_data.w[1] + noise_dist_(gen_)*0,
+    delayed_data.w[2] + noise_dist_(gen_)*0
   };
 
   // Construct and publish the IMU measurement message

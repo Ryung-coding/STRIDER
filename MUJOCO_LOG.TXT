@@ -160,3 +160,6 @@ ERROR: could not create window
 Fri May  9 21:48:42 2025
 ERROR: could not create window
 
+Fri May  9 23:52:10 2025
+WARNING: Nan, Inf or huge value in QACC at DOF 8. The simulation is unstable. Time = 6.8660.
+

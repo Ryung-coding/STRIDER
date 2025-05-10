@@ -139,7 +139,7 @@ class MuJoCoSimulatorNode(Node):
 
     def publish_mujoco_state(self):
         #measured_hz = len(self._sim_times) / (self._sim_times[-1] - self._sim_times[0])
-        measured_hz = 100.0
+        measured_hz = 50.0
         msg = MujocoState()
         msg.hz = measured_hz
         self.mujoco_state_publisher.publish(msg)

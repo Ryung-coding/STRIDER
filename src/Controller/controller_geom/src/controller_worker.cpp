@@ -129,6 +129,10 @@ void ControllerNode::imuCallback(const imu_interfaces::msg::ImuMeasured::SharedP
   roll_[0]  = std::atan2(2.0*(w*x + y*z), 1.0 - 2.0*(x*x + y*y));
   pitch_[0] = std::asin (2.0*(w*y - z*x));
   yaw_[0]   = std::atan2(2.0*(w*z + x*y), 1.0 - 2.0*(y*y + z*z));
+  RCLCPP_INFO(this->get_logger(), "RPY [deg]: Roll=%.3f, Pitch=%.3f, Yaw=%.3f",
+            roll_[0] * 180.0 / M_PI,
+            pitch_[0] * 180.0 / M_PI,
+            yaw_[0] * 180.0 / M_PI);
 }
 
 void ControllerNode::heartbeat_timer_callback() {
