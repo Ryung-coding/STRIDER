@@ -12,6 +12,8 @@ import threading
 import time
 from collections import deque
 
+import signal
+
 class MuJoCoSimulatorNode(Node):
     def __init__(self, executor):
         super().__init__('mujoco_node')
@@ -98,8 +100,7 @@ class MuJoCoSimulatorNode(Node):
                 with self.data_lock:
                     viewer.sync()  # Sync the viewer to the current simulation state
 
-        # Viewer has been closed, trigger shutdown
-        self.executor.shutdown()
+        if rclpy.ok(): rclpy.shutdown()
 
     def publish_mujoco_meas(self):
         # Extract state information
@@ -127,9 +128,9 @@ class MuJoCoSimulatorNode(Node):
         msg = MuJoCoMeas(
             q=[q[0], q[1], q[2], q[3]],
             w=[w[0], w[1], w[2]],
-            pos=[-pos[0], -pos[1], -pos[2]],
-            vel=[-vel[0], -vel[1], -vel[2]],
-            acc=[-acc[0], -acc[1], -acc[2]],
+            pos=[pos[0], pos[1], pos[2]],
+            vel=[vel[0], vel[1], vel[2]],
+            acc=[acc[0], acc[1], acc[2]],
             a1_q = a1_q,
             a2_q = a2_q,
             a3_q = a3_q,
@@ -138,7 +139,7 @@ class MuJoCoSimulatorNode(Node):
         self.mujoco_meas_publisher.publish(msg)
 
     def publish_mujoco_state(self):
-        #measured_hz = len(self._sim_times) / (self._sim_times[-1] - self._sim_times[0])
+        # measured_hz = len(self._sim_times) / (self._sim_times[-1] - self._sim_times[0])
         measured_hz = 50.0
         msg = MujocoState()
         msg.hz = measured_hz
@@ -150,15 +151,19 @@ def main(args=None):
     executor = SingleThreadedExecutor()
     node = MuJoCoSimulatorNode(executor)
 
+    signal.signal(signal.SIGINT, signal.default_int_handler)
+
+    executor.add_node(node)
     try:
-        executor.add_node(node)
         executor.spin()
     except KeyboardInterrupt:
         pass
+    except RuntimeError as e:
+        if 'Unable to convert call argument to Python object' in str(e): pass
+        else: raise
     finally:
-        if rclpy.ok():
-            node.destroy_node()
-            rclpy.shutdown()
+        node.destroy_node()
+        if rclpy.ok(): rclpy.shutdown()
 
 if __name__ == '__main__':
     main()

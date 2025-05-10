@@ -1,17 +1,12 @@
+import os
+os.environ['RCUTILS_CONSOLE_OUTPUT_FORMAT'] = '{message}'
+
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, OpaqueFunction
+from launch.actions import DeclareLaunchArgument, OpaqueFunction, RegisterEventHandler, LogInfo
 from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch_ros.actions import Node
 from launch.conditions import IfCondition
-import os
-from ament_index_python.packages import get_package_share_directory
-from launch.actions import IncludeLaunchDescription
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-
-mocap_share_dir = get_package_share_directory('mocap')
-node_config = os.path.join(mocap_share_dir, 'config', 'cfg.yaml')
-rviz_config = os.path.join(mocap_share_dir, 'config', 'rviz.rviz')
-
+from launch.event_handlers import OnProcessStart, OnShutdown
 
 def validate_mode(context, *args, **kwargs):
     # Retrieve the mode value from the launch configuration
@@ -49,44 +44,12 @@ def generate_launch_description():
             parameters=[{'mode': mode}],
         ),
 
-
-        Node(
-            package='mocap',
-            executable='motion_capture_tracking_node',
-            name='motion_capture_tracking',
-            output='screen',
-            parameters=[node_config],
-            condition=IfCondition(PythonExpression(["'", mode, "' == 'real'"]))
-        ),
-
-        # opti_RViz 생략가능함 
-        Node(
-            package='rviz2',
-            executable='rviz2',
-            name='rviz2',
-            arguments=['-d', rviz_config],
-            condition=IfCondition(PythonExpression(["'", mode, "' == 'real'"]))
-        ),
-
         # IMU Node
         Node(
             package='imu_worker',
             executable='imu_worker',
             name='imu_node',
             parameters=[{'mode': mode}],
-            condition=IfCondition(PythonExpression(["'", mode, "' == 'real'"]))
-        ),
-
-        # Microstrain Node (launch 포함)
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                os.path.join(
-                    get_package_share_directory('microstrain_inertial_driver'),
-                    'launch',
-                    'microstrain_launch.py'
-                )
-            ),
-            condition=IfCondition(PythonExpression(["'", mode, "' == 'real'"])),
         ),
 
         # SBUS Worker Node
@@ -148,8 +111,28 @@ def generate_launch_description():
         ),
     ]
 
+    # --- Event handler: print info log when last node starts ---
+    on_start_info = RegisterEventHandler(
+        OnProcessStart(
+            target_action=nodes[-1],
+            on_start=[
+                LogInfo(msg="\n\n\n\n\n >>   'Let's roll.'  <<\n")
+            ],
+        )
+    )
+
+    shutdown_handler = RegisterEventHandler(
+        OnShutdown(
+            on_shutdown=[
+                LogInfo(msg="\n\n >> 'Close all nodes' <<\n\n\n\n")
+            ]
+        )
+    )
+
     return LaunchDescription([
         mode_arg,
         OpaqueFunction(function=validate_mode),
         *nodes,
+        on_start_info,
+        shutdown_handler,
     ])

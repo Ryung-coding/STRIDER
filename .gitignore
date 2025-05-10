@@ -11,3 +11,4 @@ log/
 .idea/
 *.swp
 *.swo
+MUJOCO_LOG.txt

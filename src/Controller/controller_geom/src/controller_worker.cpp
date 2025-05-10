@@ -24,8 +24,8 @@ ControllerNode::ControllerNode()
   heartbeat_timer_ = this->create_wall_timer(std::chrono::milliseconds(100), std::bind(&ControllerNode::heartbeat_timer_callback, this));
   debugging_timer_ = this->create_wall_timer(std::chrono::milliseconds(100), std::bind(&ControllerNode::debugging_timer_callback, this));
 
-  command_->xd << 0.0, 0.0, -1.0;
-  command_->b1d << 1.0, 0.0, 0.0;
+  command_->xd << 1.0, -1.0, -1.0; //현재는 여기가 직통 위치 글로벌 기준 원점대칭
+  command_->b1d << 0.4472, -0.8944, 0;
 
   // main-tasking thread
   controller_thread_ = std::thread(&ControllerNode::controller_loop, this);
@@ -67,7 +67,7 @@ void ControllerNode::sbusCallback(const sbus_interfaces::msg::SbusSignal::Shared
 
   ref_[2] = ref_[2] * 1.5; // scale
   
-  command_->xd << ref_[0], ref_[1], -ref_[2];
+  command_->xd << -ref_[0], -ref_[1], -ref_[2]; //여기 나중에 고쳐야 함 
   command_->xd_dot.setZero();
   command_->xd_2dot.setZero();
   command_->xd_3dot.setZero();
@@ -79,9 +79,9 @@ void ControllerNode::sbusCallback(const sbus_interfaces::msg::SbusSignal::Shared
 }
 
 void ControllerNode::optitrackCallback(const mocap_interfaces::msg::MocapMeasured::SharedPtr msg) {
-  state_->x << msg->pos[0], msg->pos[1], msg->pos[2];
-  state_->v << msg->vel[0], msg->vel[1], msg->vel[2];
-  state_->a << msg->acc[0], msg->acc[1], msg->acc[2];
+  state_->x << -msg->pos[0], -msg->pos[1], -msg->pos[2];
+  state_->v << -msg->vel[0], -msg->vel[1], -msg->vel[2];
+  state_->a << -msg->acc[0], -msg->acc[1], -msg->acc[2];
   
   x_[0] = msg->pos[0]; y_[0] = msg->pos[1]; z_[0] = msg->pos[2];
   x_[1] = msg->vel[0]; y_[1] = msg->vel[1]; z_[1] = msg->vel[2];
@@ -115,12 +115,6 @@ void ControllerNode::imuCallback(const imu_interfaces::msg::ImuMeasured::SharedP
   state_->R(2,1) = 2.0 * (yz + wx);
   state_->R(2,2) = 1.0 - 2.0 * (xx + yy);
 
-  // Eigen::Matrix3d R_convert;
-  // R_convert << 1,  0,  0,
-  //             0, -1,  0,
-  //             0,  0, -1;
-  // state_->R = R_convert * state_->R;
-
   // gyro
   state_->W << msg->w[0], msg->w[1], msg->w[2];
   roll_[1] = msg->w[0]; pitch_[1] = msg->w[1]; yaw_[1] = msg->w[2];
@@ -129,10 +123,6 @@ void ControllerNode::imuCallback(const imu_interfaces::msg::ImuMeasured::SharedP
   roll_[0]  = std::atan2(2.0*(w*x + y*z), 1.0 - 2.0*(x*x + y*y));
   pitch_[0] = std::asin (2.0*(w*y - z*x));
   yaw_[0]   = std::atan2(2.0*(w*z + x*y), 1.0 - 2.0*(y*y + z*z));
-  RCLCPP_INFO(this->get_logger(), "RPY [deg]: Roll=%.3f, Pitch=%.3f, Yaw=%.3f",
-            roll_[0] * 180.0 / M_PI,
-            pitch_[0] * 180.0 / M_PI,
-            yaw_[0] * 180.0 / M_PI);
 }
 
 void ControllerNode::heartbeat_timer_callback() {
@@ -170,7 +160,6 @@ void ControllerNode::controller_loop() {
   auto next_time = std::chrono::steady_clock::now() + period;
 
   while (rclcpp::ok() && thread_running_) {
-    rclcpp::spin_some(shared_from_this());
     controller_timer_callback();
     std::this_thread::sleep_until(next_time);
     next_time += period;
@@ -192,15 +181,7 @@ int main(int argc, char **argv) {
   rclcpp::init(argc, argv);
   auto node = std::make_shared<ControllerNode>();
 
-  // wait forever until signal (Ctrl+C)
-  rclcpp::on_shutdown([&]() {
-    RCLCPP_INFO(node->get_logger(), "Shutdown signal received");
-  });
-
-  while (rclcpp::ok()) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-  }
-
+  rclcpp::spin(node);
   rclcpp::shutdown();
   return 0;
 }
